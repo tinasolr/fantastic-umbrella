@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" fx:id="AltaCopia" prefHeight="563.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="txtBuscarCopia" layoutX="401.0" layoutY="21.0" />
+      <Label fx:id="lblBuscarCopia" layoutX="317.0" layoutY="25.0" prefWidth="71.0" text="Buscar Copia:" />
+      <Label fx:id="lblMedio" layoutX="14.0" layoutY="25.0" text="Medio a Copiar:" />
+      <TextField fx:id="txtMedio" disable="true" layoutX="112.0" layoutY="21.0" prefHeight="25.0" prefWidth="163.0" />
+      <ScrollPane fx:id="ScrollPaneTabla" layoutX="10.0" layoutY="62.0" prefHeight="220.0" prefWidth="664.0">
+         <content>
+            <TableView fx:id="TablaCopias" prefHeight="216.0" prefWidth="654.0">
+              <columns>
+                <TableColumn id="1" fx:id="colIDCopia" prefWidth="73.0" text="ID Copia" />
+                  <TableColumn id="2" fx:id="colFormato" prefWidth="102.0" text="Formato" />
+                  <TableColumn fx:id="colUbicacion" prefWidth="108.0" text="Ubicación" />
+                <TableColumn id="3" fx:id="colEnDeposito" minWidth="0.0" prefWidth="78.0" text="En Depósito" />
+                  <TableColumn id="4" fx:id="colDescripcion" prefWidth="282.0" text="Descripción" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <Label fx:id="lblFormato" layoutX="35.0" layoutY="306.0" text="Formato:" />
+      <TextArea fx:id="txtDescripcion" layoutX="35.0" layoutY="389.0" prefHeight="82.0" prefWidth="527.0" promptText="Escriba una corta descripción" wrapText="true"/>
+      <Button fx:id="btnFinalizar" layoutX="140.0" layoutY="490.0" mnemonicParsing="false" onAction="#agregarCopia" prefHeight="25.0" prefWidth="106.0" text="Crear Copia" visible="false" />
+      <Button fx:id="btnEliminar" layoutX="140.0" layoutY="490.0" mnemonicParsing="false" onAction="#eliminarCopia" prefHeight="25.0" prefWidth="106.0" text="Eliminar Copia" visible="false" />
+      <ComboBox fx:id="cmbFormato" layoutX="140.0" layoutY="306.0" prefHeight="25.0" prefWidth="230.0" promptText="Seleccionar..." />
+      <Label fx:id="lblUbicaciones" layoutX="35.0" layoutY="351.0" text="Ubicación:" />
+      <ComboBox fx:id="cmbUbicaciones" layoutX="140.0" layoutY="347.0" prefHeight="25.0" prefWidth="230.0" promptText="Seleccionar..." />
+      <CheckBox fx:id="chkDeposito" layoutX="401.0" layoutY="351.0" mnemonicParsing="false" text="En Depósito" />
+      <Button fx:id="btnModificar" layoutX="140.0" layoutY="490.0" mnemonicParsing="false" onAction="#modificarCopia" prefHeight="25.0" prefWidth="106.0" text="Actualizar Copia" visible="false" />
+      <Button fx:id="btnCancelar" layoutX="299.0" layoutY="490.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="25.0" prefWidth="106.0" text="Cancelar" />
+   </children>
+</AnchorPane>

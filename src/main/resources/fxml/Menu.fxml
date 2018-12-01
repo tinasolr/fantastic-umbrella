@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swt.controller.IOCtrlMenu">
+   <children>
+      <MenuBar fx:id="mnuPpal" layoutX="-8.0" layoutY="2.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="934.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu fx:id="mArchivo" text="_Archivo">
+            <items>
+                  <Menu fx:id="arcNuevo" text="_Nuevo">
+                    <items>
+                      <MenuItem fx:id="AltaSoftware" onAction="#altaSoftware" text="So_ftware" />
+                        <MenuItem fx:id="AltaMedio" onAction="#altaMedio" text="Me_dio" />
+                    </items>
+                  </Menu>
+                  <MenuItem fx:id="arcImportar" onAction="#importar" text="_Importar..." />
+                  <Menu fx:id="arcExportar" text="_Exportar...">
+                    <items>
+                        <MenuItem fx:id="expMedios" onAction="#exportar" text="_Medios" />
+                      <MenuItem fx:id="expSoftware" onAction="#exportar" text="_Software" />
+                        <MenuItem fx:id="expCopias" onAction="#exportar" text="Co_pias" />
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem />
+                  <Menu fx:id="mnuOpciones" text="_Opciones">
+                    <items>
+                        <MenuItem fx:id="mnuImgPath" onAction="#modifDirImg" text="Modificar di_rectorio de imagenes" />
+                        <Menu fx:id="mnuAdmUsers" text="Admin. de _usuarios">
+                          <items>
+                            <MenuItem fx:id="altaUser" onAction="#altaUsuario" text="_Alta de usuario" />
+                              <MenuItem fx:id="modUser" onAction="#modifUsuario" text="Mo_dificar usuarios" />
+                              <MenuItem fx:id="bajaUser" onAction="#bajaUsuario" text="_Baja de usuario" />
+                          </items>
+                        </Menu>
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
+            </items>
+          </Menu>
+          <Menu fx:id="mEditar" text="_Editar">
+            <items>
+                  <MenuItem fx:id="ABMFormatos" onAction="#editarFormato" text="_Formatos" />
+              <MenuItem fx:id="ABMUbicaciones" onAction="#editarUbicaciones" text="_Ubicaciones" />
+                  <MenuItem fx:id="ABMSistemaOperat" onAction="#editarSistOperativos" text="Sistemas _Operativos" />
+            </items>
+          </Menu>
+            <Menu fx:id="mVer" text="_Ver">
+              <items>
+                <MenuItem fx:id="ConsultaSoftware" onAction="#handleChangeView" text="S_oftware" />
+                  <MenuItem fx:id="ConsultaMedios" onAction="#handleChangeView" text="M_edios" />
+              </items>
+            </Menu>
+          <Menu fx:id="mAyuda" text="A_yuda">
+            <items>
+                  <MenuItem fx:id="ayVerManual" onAction="#openManual" text="_Ver Manual" />
+              <MenuItem fx:id="ayInformacion" onAction="#showInfo" text="S_obre Nos" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <BorderPane fx:id="mainWindow" layoutY="24.0" prefHeight="616.0" prefWidth="927.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+        <center>
+        </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
