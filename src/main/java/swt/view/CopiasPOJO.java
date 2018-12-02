@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -30,14 +30,11 @@ public class CopiasPOJO {
     private String formato;
     private String ubicacion;
     private String ubiObserv;
-    private boolean manual;
-    private boolean caja;
-    private String imagen;
 
     public CopiasPOJO() {
     }
 
-    public CopiasPOJO(String codigo, String medCodigo, String medNomb, String observ, String formato, String ubicacion, String ubiObserv, boolean manual, boolean caja, String imagen) {
+    public CopiasPOJO(String codigo, String medCodigo, String medNomb, String observ, String formato, String ubicacion, String ubiObserv) {
         this.codigo = codigo;
         this.medCodigo = medCodigo;
         this.medNomb = medNomb;
@@ -45,9 +42,6 @@ public class CopiasPOJO {
         this.formato = formato;
         this.ubicacion = ubicacion;
         this.ubiObserv = ubiObserv;
-        this.manual = manual;
-        this.caja = caja;
-        this.imagen = imagen;
     }
 
     public String getCodigo() {
@@ -106,29 +100,4 @@ public class CopiasPOJO {
         this.ubiObserv = ubiObserv;
     }
 
-    public boolean isManual() {
-        return manual;
-    }
-
-    public void setManual(boolean manual) {
-        this.manual = manual;
-    }
-
-    public boolean isCaja() {
-        return caja;
-    }
-
-    public void setCaja(boolean caja) {
-        this.caja = caja;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
-
-    
 }

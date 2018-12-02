@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -103,6 +103,8 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
                         udb.delete(tblUbicaciones.getSelectionModel().getSelectedItem().getId(), result.get());
                         ubictrl.getUbis().remove(tblUbicaciones.getSelectionModel().getSelectedItem());
                         loadTable();
+                        new MediosCtrl().cargarMedios();
+                        consMasivaMedios.loadTable();
                     }
                     txtCodigo.clear();
                     txtDescripcion.clear();

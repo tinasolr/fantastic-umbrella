@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -201,6 +201,7 @@ public class CopiasDB {
         }
         return obj;
     }
+
     public void write(String medioid, int formid, String obs) {
         log.trace("Creating copia...");
 

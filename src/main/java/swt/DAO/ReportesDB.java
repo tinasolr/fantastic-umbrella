@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -17,30 +17,26 @@
  */
 package swt.DAO;
 
-import swt.view.SoftwarePOJO;
-import swt.view.MediosPOJO;
-import swt.view.CopiasPOJO;
 import java.sql.*;
 import java.util.*;
-import java.util.logging.*;
+import swt.view.*;
 
 /**
  *
  * @author tinar
  */
-public class ReportesDB extends DBObject{
+public class ReportesDB {
 
     public List<SoftwarePOJO> readSoftwareReport(){
 
         List<SoftwarePOJO> softrep = new ArrayList<>();
 
-        try {
-            if(conn==null || conn.isClosed())
-                connect();
+        try (Connection conn = DataSource.getConnection();
+            CallableStatement sp = conn.prepareCall("CALL report_software()");
+            ResultSet res = sp.executeQuery()){
 
             //s.sw_id, sw_nom, sw_vers, so_nom, extra_nom, extra_vers, extra_descr, extra_partes
-            CallableStatement sp = conn.prepareCall("CALL report_software()");
-            try (ResultSet res = sp.executeQuery()) {
+
                 while(res.next()){
                     int codigo = res.getInt(1);
                     String nombre = res.getString(2);
@@ -52,15 +48,9 @@ public class ReportesDB extends DBObject{
                     int exPartes = res.getInt(8);
                     softrep.add(new SoftwarePOJO(codigo, nombre, sistOp, version, exNomb, exVers, exDescr, exPartes));
                 }
-            }
+
         } catch (SQLException ex) {
-            Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ex.printStackTrace();
         }
         return softrep;
     }
@@ -69,13 +59,12 @@ public class ReportesDB extends DBObject{
 
         List<MediosPOJO> medrep = new ArrayList<>();
 
-        try {
-            if(conn==null || conn.isClosed())
-                connect();
+        try (Connection conn = DataSource.getConnection();
+            CallableStatement sp = conn.prepareCall("CALL report_medios()");
+            ResultSet res = sp.executeQuery()){
 
     //m.medio_id, medio_nom, sw_nom, sw_vers, medio_partes, medio_manual, medio_caja, medio_imagen, medio_obs, form_nom, origen_id, u.ubi_id, ubi_obs
-            CallableStatement sp = conn.prepareCall("CALL report_medios()");
-            try (ResultSet res = sp.executeQuery()) {
+
                 while(res.next()){
                     String codigo = res.getString(1);
                     String nombre = res.getString(2);
@@ -95,15 +84,8 @@ public class ReportesDB extends DBObject{
                         String.valueOf(partes), manual, caja, imagen, observ, formato,
                         String.valueOf(origen), ubicacion, ubiObserv));
                 }
-            }
         } catch (SQLException ex) {
-            Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ex.printStackTrace();
         }
         return medrep;
     }
@@ -112,13 +94,12 @@ public class ReportesDB extends DBObject{
 
         List<CopiasPOJO> coprep = new ArrayList<>();
 
-        try {
-            if(conn==null || conn.isClosed())
-                connect();
+        try (Connection conn = DataSource.getConnection();
+            CallableStatement sp = conn.prepareCall("CALL report_copias()");
+            ResultSet res = sp.executeQuery()){
 
             //copia_id, m.medio_id, medio_nom, cp_obs, form_nom, u.ubi_id, ubi_obs, medio_manual, medio_caja, medio_imagen
-            CallableStatement sp = conn.prepareCall("CALL report_copias()");
-            try (ResultSet res = sp.executeQuery()) {
+
                 while(res.next()){
                     int codigo = res.getInt(1);
                     String medCodigo = res.getString(2);
@@ -127,50 +108,14 @@ public class ReportesDB extends DBObject{
                     String formato = res.getString(5);
                     String ubicacion = res.getString(6);
                     String ubiObserv = res.getString(7);
-                    boolean manual = res.getBoolean(8);
-                    boolean caja = res.getBoolean(9);
-                    String imagen = res.getString(10);
 
                     coprep.add(new CopiasPOJO(String.valueOf(codigo), medCodigo,
-                        medNomb, observ, formato, ubicacion, ubiObserv,
-                        manual, caja, imagen));
+                        medNomb, observ, formato, ubicacion, ubiObserv));
                 }
-            }
         } catch (SQLException ex) {
-            Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ReportesDB.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            ex.printStackTrace();
         }
         return coprep;
-    }
-
-    @Override
-    public <E> E readResultSet(ResultSet res) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void executeWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void executeUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void executeDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

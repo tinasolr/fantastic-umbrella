@@ -18,11 +18,13 @@
 package swt.controller;
 
 import com.opencsv.*;
+import com.opencsv.bean.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.time.*;
 import java.time.format.*;
+import java.util.*;
 import swt.DAO.*;
 import swt.view.*;
 
@@ -32,6 +34,13 @@ import swt.view.*;
 public class CSVCtrl {
 
     private SoftwareCtrl sctrl = new SoftwareCtrl();
+    private static final String[] headerMedios = {
+    "Codigo", "Nombre", "Software",
+    "Formato", "Es original", "Manual",
+    "Caja", "Fecha", "Ubicacion", "Guardado", "Observaciones"
+    };
+    private static final String[] headerSoftware = { "", "", "","", "Nombre", "Version", "Descripcion", "Partes" };
+    private static final String[] headerCopias = { "", "", "","", "Nombre", "Version", "Descripcion", "Partes" };
 
     public void writeSoftwareDataLineByLine(String filePath){
         // first create file object for file placed at location
@@ -56,13 +65,13 @@ public class CSVCtrl {
             String[] header2 = { "", "", "","", "Nombre", "Version", "Descripcion", "Partes" };
             writer.writeNext(header2);
 
-            for(SoftwarePOJO s : new ReportesDB().readSoftwareReport()){
+            for (SoftwarePOJO s : new ReportesDB().readSoftwareReport()) {
                 String[] dataRow = { String.valueOf(s.getCodigo()), s.getNombre(),
                     s.getVersion(),s.getSistOp(), s.getExNomb(), s.getExVers(),
                     s.getExDescr(), String.valueOf(s.getExPartes())};
                 writer.writeNext(dataRow);
             }
-            // closing writer connection
+
             writer.close();
             PopUp.popUpInfo("El archivo se encuentra en " + file.getPath(), null, "Éxito!");
         }
@@ -131,17 +140,16 @@ public class CSVCtrl {
             // adding header to csv
 //copia_id, m.medio_id, medio_nom, cp_obs, form_nom, u.ubi_id, ubi_obs, medio_manual, medio_caja, medio_imagen
             String[] header = { "Codigo", "Formato", "Observaciones",
-                "Ubicacion","", "Medio", "", "", "", ""};
+                "Ubicacion","", "Medio", ""};
             writer.writeNext(header);
-            String[] header2 = { "", "", "", "Codigo","Observaciones",
-                "Codigo", "Nombre", "Manual", "Caja", "Imagen" };
+            String[] header2 = { "", "", "", "Codigo","Descripcion",
+                "Codigo", "Nombre" };
             writer.writeNext(header2);
 
             for(CopiasPOJO s : new ReportesDB().readCopiasReport()){
                 String[] dataRow = { s.getCodigo(), s.getFormato(), s.getObserv(),
                     s.getUbicacion(),s.getUbiObserv(), s.getMedCodigo(),
-                    s.getMedNomb(), s.isManual()?"Si":"No", s.isCaja()?"Si":"No",
-                    s.getImagen() };
+                    s.getMedNomb()};
                 writer.writeNext(dataRow);
             }
             // closing writer connection
@@ -180,7 +188,7 @@ public class CSVCtrl {
         }
     }
 
-    public static void readMediosToBean(String file){
+    public static List<MediosBean> readMediosToBean(String file){
 
         String fileName = file;
         Path myPath = Paths.get(fileName);
@@ -188,22 +196,115 @@ public class CSVCtrl {
         try (BufferedReader br = Files.newBufferedReader(myPath,
                 StandardCharsets.UTF_8)) {
 
-            HeaderColumnNameMappingStrategy<Car> strategy
+            HeaderColumnNameMappingStrategy<MediosBean> strategy
                     = new HeaderColumnNameMappingStrategy<>();
-            strategy.setType(Car.class);
+            strategy.setType(MediosBean.class);
 
             CsvToBean csvToBean = new CsvToBeanBuilder(br)
-                    .withType(Car.class)
+                    .withType(MediosBean.class)
                     .withMappingStrategy(strategy)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
 
-            List<Car> cars = csvToBean.parse();
+            List<MediosBean> bean = csvToBean.parse();
+            return bean;
 
-            cars.fo
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return null;
+    }
 
+    public static List<SoftwareBean> readSoftwareToBean(String file){
+
+        String fileName = file;
+        Path myPath = Paths.get(fileName);
+
+        try (BufferedReader br = Files.newBufferedReader(myPath,
+                StandardCharsets.UTF_8)) {
+
+            HeaderColumnNameMappingStrategy<SoftwareBean> strategy
+                    = new HeaderColumnNameMappingStrategy<>();
+            strategy.setType(SoftwareBean.class);
+
+            CsvToBean csvToBean = new CsvToBeanBuilder(br)
+                    .withType(SoftwareBean.class)
+                    .withMappingStrategy(strategy)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            List<SoftwareBean> bean = csvToBean.parse();
+            return bean;
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static List<CopiasBean> readCopiasToBean(String file){
+
+        String fileName = file;
+        Path myPath = Paths.get(fileName);
+
+        try (BufferedReader br = Files.newBufferedReader(myPath,
+                StandardCharsets.UTF_8)) {
+
+            HeaderColumnNameMappingStrategy<CopiasBean> strategy
+                    = new HeaderColumnNameMappingStrategy<>();
+            strategy.setType(CopiasBean.class);
+
+            CsvToBean csvToBean = new CsvToBeanBuilder(br)
+                    .withType(CopiasBean.class)
+                    .withMappingStrategy(strategy)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            List<CopiasBean> bean = csvToBean.parse();
+            return bean;
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public void createTemplate(String type, String filePath){
+        // first create file object for file placed at location
+        // specified by filepath
+        String fileSeparator = System.getProperty("file.separator");
+
+        File file = new File(filePath + fileSeparator + "SWTtemplate-" + type +".csv");
+
+        try {
+
+            OutputStreamWriter outputfile = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+
+            CSVWriter writer = new CSVWriter(outputfile);
+
+            // adding header to csv
+            if(type.equalsIgnoreCase("medios")){
+                writer.writeNext(headerMedios);
+            }else if(type.equalsIgnoreCase("software")){
+                writer.writeNext(headerSoftware);
+            }else if(type.equalsIgnoreCase("copias")){
+                writer.writeNext(headerCopias);
+            }else {
+                throw new IOException("Template inexistente.");
+            }
+
+            for(SoftwarePOJO s : new ReportesDB().readSoftwareReport()){
+                String[] dataRow = { String.valueOf(s.getCodigo()), s.getNombre(),
+                    s.getVersion(),s.getSistOp(), s.getExNomb(), s.getExVers(),
+                    s.getExDescr(), String.valueOf(s.getExPartes())};
+                writer.writeNext(dataRow);
+            }
+            // closing writer connection
+            writer.close();
+            PopUp.popUpInfo("El archivo se encuentra en " + file.getPath(), null, "Éxito!");
+        }
+        catch (IOException e) {
+            PopUp.popUpException(e);
+        }
     }
 }

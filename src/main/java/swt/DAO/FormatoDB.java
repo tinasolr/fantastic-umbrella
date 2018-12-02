@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -53,7 +53,9 @@ public class FormatoDB {
             ResultSet rs = p.executeQuery();) {
 
             while (rs.next()) {
-                objetos.add(readResultSet(rs));
+                String f = readResultSet(rs);
+                if(!f.isEmpty() && !f.equalsIgnoreCase("INVALIDO"))
+                    objetos.add(f);
             }
             log.trace("Finished reading formatos.");
         } catch (SQLException e) {

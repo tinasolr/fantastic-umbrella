@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -40,8 +40,8 @@ public class IOCtrlMenu implements Initializable {
     private IOCtrlABMUbicaciones ubi;
     private IOCtrlAltaMedio altamedio;
     private IOCtrlAltaSwConExtras altasoftware;
-    private IOCtrlConsMasivaSw consmasivasw;
-    private IOCtrlConsMasivaMedios consmasivamed;
+    private static IOCtrlConsMasivaSw consmasivasw;
+    private static IOCtrlConsMasivaMedios consmasivamed;
     private IOCtrlModSwConExtras modsoftware;
     private IOCtrlABMUsuarios abmusuarios;
     private IOCtrlLogin login;
@@ -75,6 +75,8 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem expSoftware;
     @FXML    private MenuItem expCopias;
     @FXML    private MenuItem mnuImgPath;
+
+
 
     /*** Initializes the controller class.************************************/
     @Override
@@ -277,6 +279,8 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ABMFormato.fxml"));
 
             Parent root = loader.load();
+            IOCtrlABMFormato c = loader.getController();
+            c.setConsMasivaMedios(consmasivamed);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Formatos");
@@ -469,7 +473,13 @@ public class IOCtrlMenu implements Initializable {
                 break;
         }
     }
+    public static IOCtrlConsMasivaSw getConsmasivasw() {
+        return consmasivasw;
+    }
 
+    public static void setConsmasivasw(IOCtrlConsMasivaSw consmasivasw) {
+        IOCtrlMenu.consmasivasw = consmasivasw;
+    }
     public int getAccesos() {
         return accesos;
     }
@@ -486,13 +496,14 @@ public class IOCtrlMenu implements Initializable {
         this.mainWindow = mainWindow;
     }
 
-    public IOCtrlConsMasivaMedios getConsmasivamed() {
+    public static IOCtrlConsMasivaMedios getConsmasivamed() {
         return consmasivamed;
     }
 
     public void setConsmasivamed(IOCtrlConsMasivaMedios consmasivamed) {
         this.consmasivamed = consmasivamed;
     }
+
 
 
 }

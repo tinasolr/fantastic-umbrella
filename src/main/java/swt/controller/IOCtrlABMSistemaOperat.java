@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -35,7 +35,9 @@ import swt.DAO.*;
  */
 public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEvent>  {
 
-    private List<String> soDB = new ArrayList<>();
+    private List<String> sistOperat = new ArrayList<>();
+    private static List<SistOpDB> sistOpDeDB;
+    private final SistOpDB sistDB;
     @FXML    private ListView<String> lstSistemaOperativo;
     @FXML    private Button btnQuitar;
     @FXML    private TextField txtSistOperativo;
@@ -43,10 +45,16 @@ public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEv
     @FXML    private Button btnAceptar;
     @FXML    private AnchorPane abmSistOperat;
 
+    public IOCtrlABMSistemaOperat() {
+        this.sistDB = new SistOpDB();
+        sistOpDeDB = new ArrayList<>();
+    }
+
     /****Initializes the controller class.**********************************/
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         loadList();
         txtSistOperativo.setOnKeyPressed((KeyEvent t) -> {
             if(txtSistOperativo.getText().isEmpty())
@@ -73,18 +81,15 @@ public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEv
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
-                SistOpDB s = new SistOpDB();
-                s.connect();
-                s.setNombre(lstSistemaOperativo.getSelectionModel().getSelectedItem());
-                s.setNewNombre(name);
+
                 /*
                     Update en bd se fija si existe uno con este nuevo nombre,
                     si existe, modifica las tablas que lo usan al id del que
                     corresponde con este nombre nuevo y borra el otro.
                     De no existir, cambia el nombre de este al nuevo nombre.
                 */
-                s.update();
-                soDB.set(lstSistemaOperativo.getSelectionModel().getSelectedIndex(), name);
+                sistDB.update(lstSistemaOperativo.getSelectionModel().getSelectedItem(), name);
+                sistOperat.set(lstSistemaOperativo.getSelectionModel().getSelectedIndex(), name);
                 loadList();
                 txtSistOperativo.clear();
             });
@@ -95,21 +100,17 @@ public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEv
     @FXML
     private void agregar(ActionEvent event) {
         String sistemaOperativo = txtSistOperativo.getText();
-        if(sistemaOperativo.matches("[a-zA-Z][0-9a-zA-Z\\s]*")){
+        if(sistemaOperativo.matches("[a-zA-Z][0-9a-zA-Z\\s-]*")){
             boolean dup = false;
-            if(soDB.isEmpty())
-                getSOFromDB();
-            for (String so : soDB)
+
+            for (String so : sistOperat)
                 if(so.equalsIgnoreCase(sistemaOperativo)){
                     dup=true;
                     break;
                 }
             if(!dup){
-                SistOpDB s = new SistOpDB();
-                s.connect();
-                s.setNombre(sistemaOperativo);
-                s.write();
-                soDB.add(sistemaOperativo);
+                sistDB.write(sistemaOperativo);
+                sistOperat.add(sistemaOperativo);
                 loadList();
                 txtSistOperativo.clear();
                 btnAgregar.setDisable(true);
@@ -125,34 +126,39 @@ public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEv
 
     /*********************OTHER FUNCTIONS*************************************/
 
-    public void getSOFromDB(){
-        SistOpDB so = new SistOpDB();
-        so.connect();
-        List<SistOpDB> sos = so.read("SistOperativos");
-        for(SistOpDB s : sos)
-            soDB.add(s.getNombre());
+    public void DBtoString(){
+        sistOperat.clear();
+        for(SistOpDB s : sistOpDeDB)
+            sistOperat.add(s.getNombre());
     }
 
     public void loadList(){
-        if(soDB.isEmpty())
-            getSOFromDB();
-        if(!lstSistemaOperativo.getItems().isEmpty())
-            lstSistemaOperativo.getItems().clear();
-        lstSistemaOperativo.getItems().setAll(soDB);
+
+        if(sistOpDeDB.isEmpty()){
+            sistOpDeDB = sistDB.read();
+            DBtoString();
+        }
+//        if(!lstSistemaOperativo.getItems().isEmpty())
+//            lstSistemaOperativo.getItems().clear();
+
+        lstSistemaOperativo.getItems().setAll(sistOperat);
+
         if(lstSistemaOperativo.getItems().size()>0)
             btnQuitar.setDisable(false);
     }
 
     private void loadList(String x){
         ObservableList<String> list = FXCollections.observableArrayList();
-        List<String> data = soDB;
+        List<String> data = sistOperat;
 
         for (String f : data)
             if(f.toLowerCase().contains(x.toLowerCase()))
                 list.add(f);
 
         lstSistemaOperativo.getItems().setAll(list);
+
         lstSistemaOperativo.getSelectionModel().selectFirst();
+
         if(lstSistemaOperativo.getItems().size()>0)
             btnQuitar.setDisable(false);
         else

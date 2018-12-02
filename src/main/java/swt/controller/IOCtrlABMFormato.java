@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
 
     private List<String> formatos = new ArrayList<>();
     private final FormatoDB f;
+    private IOCtrlConsMasivaMedios consmasivamed;
     @FXML    private ListView<String> lstFormato;
     @FXML    private Button btnQuitar;
     @FXML    private Button btnAgregar;
@@ -87,6 +88,8 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
                 f.update(lstFormato.getSelectionModel().getSelectedItem(), name);
                 formatos.set(lstFormato.getSelectionModel().getSelectedIndex(), name);
                 loadList();
+                new MediosCtrl().cargarMedios();
+                consmasivamed.loadTable();
                 txtFormato.clear();
             });
 
@@ -130,12 +133,12 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
     public void loadList(){
         if(formatos.isEmpty())
             getFormatosFromDB();
+
         if(!lstFormato.getItems().isEmpty())
             lstFormato.getItems().clear();
-        for(String f : formatos){
-            if(!f.equalsIgnoreCase("INVALIDO"))
-                lstFormato.getItems().add(f);
-        }
+
+        lstFormato.getItems().setAll(formatos);
+
         if(lstFormato.getItems().size()>0)
             btnQuitar.setDisable(false);
     }
@@ -192,6 +195,10 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
                     }   break;
             }
         }
+    }
+
+    void setConsMasivaMedios(IOCtrlConsMasivaMedios consmasivamed) {
+        this.consmasivamed = consmasivamed;
     }
 
 }

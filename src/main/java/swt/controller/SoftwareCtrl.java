@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -39,12 +39,15 @@ public class SoftwareCtrl {
     private ExtrasDB extrasDB;;
     private List<Software> swDeMed;
 
-    public SoftwareCtrl(){this.swDeMed = new ArrayList<>();
+    public SoftwareCtrl(){
+        this.swDB = new SoftwareDB();
+        this.swDeMed = new ArrayList<>();
         this.extrasDB = new ExtrasDB();
         this.exCtrl = new ExtrasCtrl();
         this.medDB = new MediosDB();
         this.medCtrl = new MediosCtrl();
         this.swDB = new SoftwareDB();
+        this.soDB = new SistOpDB();
     }
 
     //FIND Software de medio
@@ -74,8 +77,6 @@ public class SoftwareCtrl {
             String nombre = s.getNombre();
             String version = s.getVersion();
             //BUSCAR SO
-            soDB = new SistOpDB();
-            soDB.connect();
             List<SistOpDB> sistOp = soDB.sistopDeSoftware(codigo);
             List<String> so = new ArrayList<>();
             if(!sistOp.isEmpty()){

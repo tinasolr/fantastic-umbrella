@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -72,25 +72,33 @@ public class IOCtrlModSwConExtras implements Initializable {
     private int codigoSw;
     private Software s;
     private ExtrasCtrl exCtrl;
+    private final SistOpDB sistOpDB;
+
+    public IOCtrlModSwConExtras() {
+        this.swCtrl = new SoftwareCtrl();
+        this.sistOpDB = new SistOpDB();
+    }
 
     /*********************Initialize Controller******************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        swCtrl = new SoftwareCtrl();
+
         if(swCtrl.getSws().isEmpty())
             swCtrl.cargarSoftware();
 
         s = swCtrl.findSoftware(codigoSw);
+
         txtNombreSw.setText(s.getNombre());
         txtVersionSw.setText(s.getVersion());
-        SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
+
+        List<SistOpDB> sos = sistOpDB.read();
+
         if(!cmbSos.getItems().isEmpty())
             cmbSos.getItems().clear();
         if(!lstSistemasOp.getItems().isEmpty())
             lstSistemasOp.getItems().clear();
         sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
-        List<SistOpDB> sos1 = so.sistopDeSoftware(codigoSw);
+        List<SistOpDB> sos1 = sistOpDB.sistopDeSoftware(codigoSw);
         sos1.forEach((x) -> { lstSistemasOp.getItems().add(x.getNombre());});
         new AutoCompleteComboBoxListener<>(cmbSos);
         loadTable();

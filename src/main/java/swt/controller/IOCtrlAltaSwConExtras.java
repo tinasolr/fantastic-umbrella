@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -33,10 +33,11 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     private BorderPane mainWindow;
     private int codigoSW;
     private Software sw;
-    private final SoftwareCtrl swCtrl = new SoftwareCtrl();
-    private final ExtrasCtrl exCtrl = new ExtrasCtrl();
-    private final SoftwareDB swDB = new SoftwareDB();
-    private List<String> sistOperativos = new ArrayList<>();
+    private final SoftwareCtrl swCtrl;
+    private final ExtrasCtrl exCtrl;
+    private final SoftwareDB swDB;
+    private final SistOpDB sistOpDB;
+    private List<String> sistOperativos;
     private IOCtrlConsMasivaSw consmasivasw;
     private IOCtrlMenu controlMenu;
 
@@ -77,12 +78,21 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     @FXML  private BorderPane bpSoftware;
     @FXML  private BorderPane bpExtras;
 
+    public IOCtrlAltaSwConExtras() {
+        this.sistOperativos = new ArrayList<>();
+        this.sistOpDB = new SistOpDB();
+        this.swDB = new SoftwareDB();
+        this.exCtrl = new ExtrasCtrl();
+        this.swCtrl = new SoftwareCtrl();
+    }
+
     /*********************Initialize Controller******************************/
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
+
+        List<SistOpDB> sos = sistOpDB.read();
+
         if(!cmbSos.getItems().isEmpty())
             cmbSos.getItems().clear();
         sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });

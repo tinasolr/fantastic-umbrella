@@ -18,10 +18,30 @@
 
 package swt.view;
 
+import com.opencsv.bean.*;
+import java.util.*;
+
 /**
  *
  * @author tinar
  */
 public class SoftwareBean {
+    @CsvBindByPosition(position = 1)
+    private String nombre;
 
+    @CsvBindByPosition(position = 2)
+    private String version;
+
+    @CsvBindAndSplitByPosition(elementType = String.class, position = 3)
+    private List<String> sistOperativos;
+
+    @CsvBindByPosition(position = 4)
+    private String nombreExtra;
+    //Getters and Setters
+    public String getNombre() {        return nombre;    }
+    public void setNombre(String nombre) {        this.nombre = nombre;    }
+    public String getVersion() {        return version;    }
+    public void setVersion(String version) {        this.version = version;    }
+    public List<String> getSistOperativos() {        return sistOperativos;    }
+    public void setSistOperativos(List<String> sistOperativos) {        this.sistOperativos = sistOperativos;    }
 }
