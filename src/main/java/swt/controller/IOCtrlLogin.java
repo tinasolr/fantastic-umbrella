@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2018 Agustina y Nicolas
  *
  * This program is free software; you can redistribute it and/or
@@ -76,6 +76,7 @@ public class IOCtrlLogin implements Initializable {
             ((Stage)window.getScene().getWindow()).setAlwaysOnTop(true);
         }
         System.out.println("swt.controller.IOCtrlLogin.login()");
+
     }
 
     @FXML

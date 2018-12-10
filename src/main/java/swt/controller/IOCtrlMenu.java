@@ -25,6 +25,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.web.*;
 import javafx.stage.*;
 
 /**
@@ -100,6 +101,11 @@ public class IOCtrlMenu implements Initializable {
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    System.exit(0);
+                }
+            });
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -107,8 +113,32 @@ public class IOCtrlMenu implements Initializable {
     /***************JAVAFX FUNCTIONS*******************************************/
     @FXML
     private void openManual(ActionEvent event) {
-        //TODO open manual
+        FXMLLoader loader = new FXMLLoader();
+
+//        MyBrowser myBrowser = new MyBrowser();
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        URL urlHello = getClass().getResource("/manualusuario-swt.html");
+        webEngine.load(urlHello.toExternalForm());
+
+//        getChildren().add(webView);
+        Scene scene = new Scene(webView);
+        Stage stage = new Stage();
+        stage.setTitle("Manual de usuario");
+        stage.setScene(scene);
+        stage.show();
     }
+
+//    class MyBrowser extends Region{
+//
+//    WebView webView = new WebView();
+//    WebEngine webEngine = webView.getEngine();
+//
+//    public MyBrowser(){
+//
+//
+//    }
+//}
 
     @FXML
     private void showInfo(ActionEvent event) {
